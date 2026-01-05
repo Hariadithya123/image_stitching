@@ -1,28 +1,28 @@
 import cv2
 import glob
 
-# Load all captured images
 image_paths = sorted(glob.glob("captured_images/*.jpg"))
 
 if len(image_paths) < 2:
-    print("Need at least 2 images to stitch")
+    print("Need at least 2 images")
     exit()
 
 images = []
-for path in image_paths:
-    img = cv2.imread(path)
+for p in image_paths:
+    img = cv2.imread(p)
+    if img is None:
+        print("Failed to read:", p)
+        exit()
     images.append(img)
 
-print(f"Loaded {len(images)} images")
+print("Images loaded:", len(images))
 
-# Create stitcher
-stitcher = cv2.Stitcher_create()
+stitcher = cv2.Stitcher_create(cv2.Stitcher_PANORAMA)
 
 status, stitched = stitcher.stitch(images)
 
 if status == cv2.Stitcher_OK:
-    cv2.imwrite("stitched_panorama.jpg", stitched)
+    cv2.imwrite("stitched_panorama_proper.jpg", stitched)
     print("Stitching successful")
-    print("Saved as stitched_panorama.jpg")
 else:
-    print("Stitching failed. Status code:", status)
+    print("Stitching failed, status code:", status)
