@@ -7,11 +7,14 @@ os.makedirs(save_dir, exist_ok=True)
 cap = cv2.VideoCapture(0)
 
 if not cap.isOpened():
-    print("ERROR: Camera not accessible")
+    print("Camera error")
     exit()
 
-print("Camera opened")
-print("Press C to capture | Press Q to quit")
+print("360 CAPTURE MODE")
+print("Rotate slowly in a circle")
+print("Capture 8–12 images")A
+print("Make sure LAST image overlaps FIRST")
+print("Press C to capture | Q to quit")
 
 count = 0
 
@@ -20,13 +23,16 @@ while True:
     if not ret:
         break
 
-    cv2.imshow("Camera Capture", frame)
+    cv2.putText(frame, f"Frames captured: {count}",
+                (20, 40), cv2.FONT_HERSHEY_SIMPLEX, 1, (0,255,0), 2)
+
+    cv2.imshow("360 Capture", frame)
+
     key = cv2.waitKey(1) & 0xFF
 
     if key == ord('c'):
-        filename = f"{save_dir}/img_{count}.jpg"
-        cv2.imwrite(filename, frame)
-        print("Saved:", filename)
+        cv2.imwrite(f"{save_dir}/img_{count}.jpg", frame)
+        print(f"Captured img_{count}.jpg")
         count += 1
 
     elif key == ord('q'):
